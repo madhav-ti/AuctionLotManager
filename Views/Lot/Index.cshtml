@@ -1,0 +1,60 @@
+﻿@model IEnumerable<AuctionLotManager.Models.Lot>
+
+@{
+    ViewBag.Title = "Lots";
+}
+
+<h2>Lots</h2>
+
+<p>
+    @Html.ActionLink("Add New Lot", "Create", null, new { @class = "btn btn-primary" })
+    @using (Html.BeginForm("Index", "Lot", FormMethod.Get))
+    {
+        <div class="form-inline mb-3">
+            <input type="text" name="searchTerm" value="@Request.QueryString["searchTerm"]"
+                   class="form-control mr-2" placeholder="Search by title..." />
+
+            <div class="form-check mr-2">
+                <input type="checkbox" name="showActive" value="true"
+                       class="form-check-input"
+                       @(Request.QueryString["showActive"] == "true" ? "checked" : "") />
+                <label class="form-check-label">Show Active Lots Only</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a href="@Url.Action("Index", "Lot")" class="btn btn-secondary ml-2">Clear</a>
+        </div>
+    }
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Lot ID</th>
+            <th>Title</th>
+            <th>Start Price</th>
+            <th>Current Bid</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var lot in Model)
+        {
+            <tr>
+                <td>@lot.LotID</td>
+                <td>@lot.Title</td>
+                <td>@lot.StartPrice</td>
+                <td>@lot.CurrentBid</td>
+                <td>@lot.StartTime.ToString("g")</td>
+                <td>@lot.EndTime.ToString("g")</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = lot.LotID }, new { @class = "btn btn-sm btn-warning" }) |
+                   
+                    @Html.ActionLink("Delete", "Delete", new { id = lot.LotID }, new { @class = "btn btn-sm btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
